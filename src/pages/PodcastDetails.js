@@ -77,7 +77,7 @@ function PodcastDetailsPage() {
               }}
             >
               <h1 className="podcast-title-heading">{podcast.title}</h1>
-              {podcast.createdBy == auth.currentUser.uid && (
+              {podcast.createdBy === auth.currentUser.uid && (
                 <Button
                   width={"200px"}
                   text={"Create Episode"}
@@ -89,7 +89,7 @@ function PodcastDetailsPage() {
             </div>
 
             <div className="banner-wrapper">
-              <img src={podcast.bannerImage} />
+              <img src={podcast.bannerImage} alt="banner" />
             </div>
             <p className="podcast-description">{podcast.description}</p>
             <h1 className="podcast-title-heading ">Episodes</h1>

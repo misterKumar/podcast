@@ -22,7 +22,7 @@ function SignupForm() {
     console.log("Handling Signup...");
     setLoading(true);
     if (
-      password == confirmPassword &&
+      password === confirmPassword &&
       password.length >= 6 &&
       fullName &&
       email
@@ -61,7 +61,7 @@ function SignupForm() {
         setLoading(false);
       }
     } else {
-      if (password != confirmPassword) {
+      if (password !== confirmPassword) {
         toast.error(
           "Please Make Sure your password and Confirm Password matches!"
         );
