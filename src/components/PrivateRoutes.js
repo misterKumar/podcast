@@ -1,13 +1,12 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Outlet, Navigate } from "react-router-dom";
-import { auth } from "../../firebase";
-import Loader from "./Loader";
+import { auth } from "../firebase";
 
 const PrivateRoutes = () => {
   const [user, loading, error] = useAuthState(auth);
 
   if (loading) {
-    return <Loader />;
+    return <p>Loading...</p>;
   } else if (!user || error) {
     return <Navigate to="/" replace />;
   } else {

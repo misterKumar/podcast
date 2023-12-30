@@ -1,0 +1,38 @@
+.card {
+  background: linear-gradient(
+    177.7deg,
+    rgba(58, 129, 191, 0.3) 1.63%,
+    rgba(65, 48, 90, 0.009) 148.18%
+  );
+  border-radius: 1rem;
+  padding: 0.5rem;
+  width: 250px;
+  opacity: 0.8;
+}
+
+.card:hover {
+  opacity: 1;
+  /* box-shadow: 0px 0px 50px 5px var(--blue); */
+  transition: all 0.2s;
+}
+
+.image {
+  width: 100%;
+  object-fit: cover;
+  height: 230px;
+  border-top-left-radius: 0.8rem;
+  border-top-right-radius: 0.8rem;
+  opacity: 0.9;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  color: #91879c;
+}
+
+.info p {
+  margin: 0.5rem 0rem;
+}

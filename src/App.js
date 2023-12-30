@@ -1,21 +1,22 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+// App.js
 import "./App.css";
-import SignUpPage from "./pages/SignUpPage";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import SignInSignUp from "./pages/SignInSignUp";
 import Profile from "./pages/Profile";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Podcasts from "./pages/Podcasts";
+import CreatePodcast from "./pages/CreatePodcast";
+import CreateEpisode from "./pages/CreateEpisode";
+import PodcastDetails from "./pages/PodcastDetails";
+import PrivateRoutes from "./components/PrivateRoutes";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./firebase";
 import { doc, onSnapshot } from "firebase/firestore";
-import { setUser } from "./slices/userSlice";
 import { useDispatch } from "react-redux";
-import PrivateRoutes from "./components/common/PrivateRoutes";
-import CreateAPodcastPage from "./pages/CreateAPodcast";
-import PodcastsPage from "./pages/Podcasts";
-import PodcastDetailsPage from "./pages/PodcastDetails";
-import CreateAnEpisodePage from "./pages/CreateAnEpisode";
-
+import { setUser } from "./slices/userSlice";
+import Header from "./components/Header";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   const dispatch = useDispatch();
 
@@ -32,6 +33,7 @@ function App() {
                   name: userData.name,
                   email: userData.email,
                   uid: user.uid,
+                  profilePic: userData.profilePic,
                 })
               );
             }
@@ -57,15 +59,15 @@ function App() {
       <ToastContainer />
       <Router>
         <Routes>
-          <Route path="/" element={<SignUpPage />} />
+          <Route path="/" element={<SignInSignUp />} />
           <Route element={<PrivateRoutes />}>
             <Route path="/profile" element={<Profile />} />
-            <Route path="/create-a-podcast" element={<CreateAPodcastPage />} />
-            <Route path="/podcasts" element={<PodcastsPage />} />
-            <Route path="/podcast/:id" element={<PodcastDetailsPage />} />
+            <Route path="/podcasts" element={<Podcasts />} />
+            <Route path="/create-podcast" element={<CreatePodcast />} />
+            <Route path="/podcast/:podcastId" element={<PodcastDetails />} />
             <Route
-              path="/podcast/:id/create-episode"
-              element={<CreateAnEpisodePage />}
+              path="/podcast/:podcastId/create-episode"
+              element={<CreateEpisode />}
             />
           </Route>
         </Routes>

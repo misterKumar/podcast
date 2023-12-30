@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import Header from "../components/common/Header";
-import { useDispatch, useSelector } from "react-redux";
-import { collection, onSnapshot, query } from "firebase/firestore";
-import { db } from "../firebase";
+// components/Podcasts.js
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { setPodcasts } from "../slices/podcastSlice";
-import PodcastCard from "../components/Podcasts/PodcastCard";
-import InputComponent from "../components/common/Input";
+import { db } from "../firebase";
+import { collection, query, onSnapshot } from "firebase/firestore";
+import Header from "../components/Header";
+import PodcastCard from "../components/PodcastCard";
 
-function PodcastsPage() {
+function Podcasts() {
+  const podcasts = useSelector((state) => state.podcast.podcasts);
   const dispatch = useDispatch();
-  const podcasts = useSelector((state) => state.podcasts.podcasts);
-  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -32,43 +32,24 @@ function PodcastsPage() {
     };
   }, [dispatch]);
 
-  console.log(podcasts);
-
-  var filteredPodcasts = podcasts.filter((item) =>
-    item.title.trim().toLowerCase().includes(search.trim().toLowerCase())
-  );
-
   return (
     <div>
       <Header />
-      <div className="input-wrapper" style={{ marginTop: "2rem" }}>
+      <div className="wrapper">
         <h1>Discover Podcasts</h1>
-        <InputComponent
-          state={search}
-          setState={setSearch}
-          placeholder="Search By Title"
-          type="text"
-        />
-
-        {filteredPodcasts.length > 0 ? (
-          <div className="podcasts-flex" style={{ marginTop: "1.5rem" }}>
-            {filteredPodcasts.map((item) => {
-              return (
-                <PodcastCard
-                  key={item.id}
-                  id={item.id}
-                  title={item.title}
-                  displayImage={item.displayImage}
-                />
-              );
-            })}
-          </div>
-        ) : (
-          <p>{search ? "Podcast Not Found" : "No Podcasts On The Platform"}</p>
-        )}
+        <div className="podcast-flex">
+          {podcasts.map((podcast) => (
+            <PodcastCard
+              key={podcast.id}
+              id={podcast.id}
+              title={podcast.title}
+              displayImage={podcast.displayImage}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
-export default PodcastsPage;
+export default Podcasts;

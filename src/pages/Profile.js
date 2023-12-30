@@ -1,38 +1,86 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import Header from "../components/common/Header";
-import Button from "../components/common/Button";
-import { auth } from "../firebase";
-import { signOut } from "firebase/auth";
-import { toast } from "react-toastify";
-import Loader from "../components/common/Loader";
+// components/Profile.js
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../slices/userSlice";
+import { auth, db } from "../firebase";
+import {
+  onSnapshot,
+  doc,
+  getDocs,
+  query,
+  collection,
+  where,
+} from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import Header from "../components/Header";
+import PodcastCard from "../components/PodcastCard";
 
 function Profile() {
   const user = useSelector((state) => state.user.user);
+  const [podcasts, setPodcasts] = useState([]);
 
-  console.log("My User", user);
+  useEffect(() => {
+    const fetchDocs = async () => {
+      const q = query(
+        collection(db, "podcasts"),
+        where("createdBy", "==", user.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      const docsData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setPodcasts(docsData);
+    };
+    if (user) {
+      fetchDocs();
+    }
+  }, [user]);
+
   if (!user) {
-    return <Loader />;
+    return <p>Loading...</p>;
   }
-
-  const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        toast.success("User Logged Out!");
-      })
-      .catch((error) => {
-        // An error happened.
-        toast.error(error.message);
-      });
-  };
 
   return (
     <div>
       <Header />
-      <h1>{user.name}</h1>
-      <h1>{user.email}</h1>
-      <h1>{user.uid}</h1>
-      <Button text={"Logout"} onClick={handleLogout} />
+      <div className="wrapper">
+        <h1>Profile</h1>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "2rem",
+          }}
+        >
+          <PodcastCard title={user.name} displayImage={user.profilePic} />
+        </div>
+        <h1 style={{ marginBottom: "2rem" }}>My Podcasts</h1>
+        <div className="podcast-flex">
+          {podcasts.length == 0 ? (
+            <p style={{ fontSize: "1.2rem" }}>You Have Zero Podcasts</p>
+          ) : (
+            <>
+              {podcasts.map((podcast) => (
+                <PodcastCard
+                  key={podcast.id}
+                  id={podcast.id}
+                  title={podcast.title}
+                  displayImage={podcast.displayImage}
+                />
+              ))}
+              {podcasts.map((podcast) => (
+                <PodcastCard
+                  key={podcast.id}
+                  id={podcast.id}
+                  title={podcast.title}
+                  displayImage={podcast.displayImage}
+                />
+              ))}
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
