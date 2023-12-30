@@ -1,4 +1,4 @@
-# Deployment Link : [https://podcast-flax-nine.vercel.app/](https://podcast-flax-nine.vercel.app/)
+# Deployment Link : [click here](https://podcast-flax-nine.vercel.app/)
 
 # Getting Started with Create React App
 
